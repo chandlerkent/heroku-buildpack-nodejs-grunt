@@ -182,7 +182,12 @@ if [ -f $BUILD_DIR/grunt.js ] || [ -f $BUILD_DIR/Gruntfile.js ] || [ -f $BUILD_D
   run_npm "install grunt-cli"
   run_npm "install grunt"
   echo "-----> Installing development dependencies"
-  run_npm "env NODE_ENV=\"development\" install"
+  echo "-----> Temporarily changing NODE_ENV to development"
+  OLD_NODE_ENV="$NODE_ENV"
+  NODE_ENV="development"
+  run_npm "install"
+  echo "-----> Changing NODE_ENV back to previous value: $OLD_NODE_ENV"
+  NODE_ENV="$OLD_NODE_ENV"
   echo "-----> Found Gruntfile, running grunt heroku:$NODE_ENV task"
   $BUILD_DIR/node_modules/.bin/grunt heroku:$NODE_ENV
 else
